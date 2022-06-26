@@ -1,4 +1,5 @@
 import { AppBar, Grid, IconButton, Toolbar, Typography } from "@mui/material";
+import { MenuOutlined, LogoutOutlined } from "@mui/icons-material";
 
 export const NavBar = ({ drawerWidtg = 240 }) => {
   return (
@@ -15,7 +16,7 @@ export const NavBar = ({ drawerWidtg = 240 }) => {
           edge="start"
           sx={{ mr: 2, display: { sm: "none" } }}
         >
-          MenuOutlined
+          <MenuOutlined />
         </IconButton>
         <Grid
           container
@@ -26,7 +27,9 @@ export const NavBar = ({ drawerWidtg = 240 }) => {
           <Typography variant="h6" noWrap component="div">
             JournalApp
           </Typography>
-          <IconButton color="error">LogoutOutlined</IconButton>
+          <IconButton color="error">
+            <LogoutOutlined />
+          </IconButton>
         </Grid>
       </Toolbar>
     </AppBar>
