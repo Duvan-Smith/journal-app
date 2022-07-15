@@ -22,12 +22,10 @@ export const LoginPage = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     dispath(checkingAuthentication());
-    console.log({ email, password });
   };
 
   const onGoogleSignIn = () => {
     dispath(startGoogleSingIn());
-    console.log("onGoogleSignIn");
   };
 
   return (
