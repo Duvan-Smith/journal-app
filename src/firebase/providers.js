@@ -54,7 +54,6 @@ export const registerUserWithEmalPassword = async ({
       errorMessage: null,
     };
   } catch (error) {
-    console.log(error);
     return { ok: false, errorMessage: error.message };
   }
 };
