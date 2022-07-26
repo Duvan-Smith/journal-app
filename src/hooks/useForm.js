@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 
-export const useForm = (initialForm = {}, formValidations = {}) => {
+export const useForm = (initialForm = {}, formValidations = [{}]) => {
   const [formState, setFormState] = useState(initialForm);
-  const [formValidation, setformValidation] = useState({});
+  const [formValidation, setformValidation] = useState([]);
 
   const isFormValid = useMemo(() => {
-    for (const formValue of Object.keys(formValidation)) {
-      if (formValidation[formValue] !== null) return false;
+    for (const newFormValidation of formValidation) {
+      for (const formValue of Object.keys(newFormValidation)) {
+        if (newFormValidation[formValue] !== null) return false;
+      }
     }
 
     return true;
@@ -33,17 +35,30 @@ export const useForm = (initialForm = {}, formValidations = {}) => {
   };
 
   const createValidators = () => {
-    const formCheckedValues = {};
-    for (const formField of Object.keys(formValidations)) {
-      const [fn, errorMessage = "Este campo es requerido"] =
-        formValidations[formField];
+    const listFormCheckedValues = [];
 
-      formCheckedValues[`${formField}Valid`] = fn(formState[formField])
-        ? null
-        : errorMessage;
+    for (const formValidation of formValidations) {
+      const formCheckedValues = {};
+
+      for (const formField of Object.keys(formValidation)) {
+        const [fn, errorMessage = "Este campo es requerido"] =
+          formValidation[formField];
+
+        formCheckedValues[`${formField}Valid`] = fn(formState[formField])
+          ? null
+          : errorMessage;
+      }
+      listFormCheckedValues.push(formCheckedValues);
     }
 
-    setformValidation(formCheckedValues);
+    setformValidation(listFormCheckedValues);
+  };
+
+  const onValidate = (key) => {
+    for (const newFormValidation of formValidation) {
+      if (!newFormValidation[key]) continue;
+      return newFormValidation[key];
+    }
   };
 
   return {
@@ -51,7 +66,8 @@ export const useForm = (initialForm = {}, formValidations = {}) => {
     formState,
     onInputChange,
     onResetForm,
-    ...formValidation,
+    formValidation,
     isFormValid,
+    onValidate,
   };
 };

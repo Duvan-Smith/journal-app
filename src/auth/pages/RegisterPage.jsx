@@ -20,14 +20,19 @@ const formData = {
   displayName: "",
 };
 
-const formValidations = {
-  email: [(value) => value.includes("@"), "El correo debe tener un @"],
-  password: [
-    (value) => value.length >= 6,
-    "El password debe terner más de 6 letras",
-  ],
-  displayName: [(value) => value.length >= 1, "El nombre es obligatorio"],
-};
+const formValidations = [
+  {
+    email: [(value) => value.includes("@"), "El correo debe tener un @"],
+    password: [
+      (value) => value.length >= 6,
+      "El password debe terner más de 6 letras",
+    ],
+    displayName: [(value) => value.length >= 1, "El nombre es obligatorio"],
+  },
+  {
+    email: [(value) => value.includes("no"), "El correo debe tener un no"],
+  },
+];
 
 export const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -46,9 +51,7 @@ export const RegisterPage = () => {
     password,
     onInputChange,
     isFormValid,
-    displayNameValid,
-    emailValid,
-    passwordValid,
+    onValidate,
   } = useForm(formData, formValidations);
 
   const onSubmit = (event) => {
@@ -77,8 +80,8 @@ export const RegisterPage = () => {
               name="displayName"
               value={displayName}
               onChange={onInputChange}
-              error={!!displayNameValid && formSubmitted}
-              helperText={displayNameValid}
+              error={!!onValidate("displayNameValid") && formSubmitted}
+              helperText={onValidate("displayNameValid")}
             />
           </Grid>
           <Grid item xs={12} sx={{ mb: 2 }}>
@@ -90,8 +93,8 @@ export const RegisterPage = () => {
               name="email"
               value={email}
               onChange={onInputChange}
-              error={!!emailValid && formSubmitted}
-              helperText={emailValid}
+              error={!!onValidate("emailValid") && formSubmitted}
+              helperText={onValidate("emailValid")}
             />
           </Grid>
           <Grid item xs={12} sx={{ mb: 2 }}>
@@ -103,8 +106,8 @@ export const RegisterPage = () => {
               name="password"
               value={password}
               onChange={onInputChange}
-              error={!!passwordValid && formSubmitted}
-              helperText={passwordValid}
+              error={!!onValidate("passwordValid") && formSubmitted}
+              helperText={onValidate("passwordValid")}
             />
           </Grid>
           <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
